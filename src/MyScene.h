@@ -24,10 +24,10 @@
 class MyScene : public QGraphicsScene {
     Q_OBJECT
 private:
-    QGraphicsPixmapItem* item = new  QGraphicsPixmapItem(QPixmap("BG.png"));
+    QGraphicsPixmapItem* item = new  QGraphicsPixmapItem(QPixmap(":/assets/img/BG.png"));
     QGraphicsRectItem* qgri = new QGraphicsRectItem(10, 100, 300, 200);
     QGraphicsTextItem* qgti = new QGraphicsTextItem("CIR2 Rennes");
-    QGraphicsPixmapItem* mainSpaceShip = new  QGraphicsPixmapItem(QPixmap("4_Green.png"));
+    QGraphicsPixmapItem* mainSpaceShip = new  QGraphicsPixmapItem(QPixmap(":/assets/img/4_Green.png"));
     QGraphicsView* view = new QGraphicsView(this);
     QGraphicsTextItem *counter = new QGraphicsTextItem("Score : " + QString::number(score));
     QVector<Ennemy*> listeEnnemy;

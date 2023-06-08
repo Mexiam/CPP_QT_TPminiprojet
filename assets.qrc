@@ -1,0 +1,12 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file>assets/img/3_Red.png</file>
+        <file>assets/img/5_Red.png</file>
+        <file>assets/img/6_Red.png</file>
+        <file>assets/img/10_Red.png</file>
+        <file>assets/img/BG.png</file>
+        <file>assets/img/4_Green.png</file>
+
+    </qresource>
+</RCC>

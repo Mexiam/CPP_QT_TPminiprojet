@@ -118,22 +118,22 @@ QString MyScene::getRandomSpaceship() {
     int randomSpaceShip = QRandomGenerator::global()->bounded(1,5);
     switch (randomSpaceShip) {
         case 1:
-            spaceshipEnnemy = "3_Red.png";
+            spaceshipEnnemy = ":/assets/img/3_Red.png";
             break;
         case 2:
-            spaceshipEnnemy = "5_Red.png";
+            spaceshipEnnemy = ":/assets/img/5_Red.png";
             break;
         case 3:
-            spaceshipEnnemy = "6_Red.png";
+            spaceshipEnnemy = ":/assets/img/6_Red.png";
             break;
         case 4:
-            spaceshipEnnemy = "9_Red.png";
+            spaceshipEnnemy = ":/assets/img/9_Red.png";
             break;
         case 5:
-            spaceshipEnnemy = "10_Red.png";
+            spaceshipEnnemy = ":/assets/img/10_Red.png";
             break;
         default:
-            spaceshipEnnemy = "3_Red.png";
+            spaceshipEnnemy = ":/assets/img/3_Red.png";
             break;
     };
     return spaceshipEnnemy;
