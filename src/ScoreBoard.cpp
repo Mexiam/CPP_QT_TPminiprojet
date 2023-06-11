@@ -6,8 +6,13 @@
 
 ScoreBoard::ScoreBoard(const QString &name, QWidget *parent)  : QTableWidget(parent){
     QFile file(name);
+    if (!file.exists()) {
+        qDebug() << "Fichier CSV inexistant.";
+    }
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "Fichier CSV des scores inaccessible.";
+        qDebug() << file.errorString();
+        qDebug() << file.error();
     } else {
         QTextStream in(&file);
         QVector<QStringList> scoreList;

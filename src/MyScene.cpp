@@ -205,8 +205,13 @@ void MyScene::death() {
     deathWidget->show();
 
     QFile file(":/assets/data/scores.csv");
+    if (!file.exists()) {
+        qDebug() << "Fichier CSV inexistant.";
+    }
     if (!file.open(QIODevice::Append | QIODevice::Text)) {
         qDebug() << "Fichier CSV des scores inaccessible.";
+        qDebug() << file.errorString();
+        qDebug() << file.error();
     } else {
         QDate currentDate = QDate::currentDate();
         int day = currentDate.day();
