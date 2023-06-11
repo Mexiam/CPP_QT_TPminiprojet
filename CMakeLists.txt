@@ -14,6 +14,6 @@ find_package(Qt6 COMPONENTS
 
 file (GLOB_RECURSE sourceCode src/*.cpp src/*.h)
 
-add_executable(CPP_QT_TPminiprojet ${sourceCode} src/Ennemy.cpp src/Ennemy.h assets.qrc)
+add_executable(CPP_QT_TPminiprojet ${sourceCode} src/Ennemy.cpp src/Ennemy.h assets.qrc src/Missile.h )
 
 target_link_libraries(CPP_QT_TPminiprojet Qt6::Widgets Qt6::Multimedia)

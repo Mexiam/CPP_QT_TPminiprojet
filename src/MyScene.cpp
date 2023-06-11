@@ -10,6 +10,8 @@ MyScene::MyScene(QObject* parent) : QGraphicsScene(parent) {
     this->addItem(mainSpaceShip);
     this->addItem(counter);
     this->addItem(explosion);
+    qDeleteAll(listeEnnemy);
+    listeEnnemy.clear();
     createEnemy();
 
     //this->addItem(ennemy1);
@@ -29,7 +31,10 @@ MyScene::MyScene(QObject* parent) : QGraphicsScene(parent) {
     this->mainSpaceShip->setPos(500, 3900);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     timer->start(30); //toutes les 30 millisecondes
-
+    connect(timerEnnemy, SIGNAL(timeout()), this, SLOT(updateEnnemy()));
+    timerEnnemy->start(30); //toutes les 30 millisecondes
+    connect(timerMissile, SIGNAL(timeout()), this, SLOT(updateMissile()));
+    timerMissile->start(30); //toutes les 30 millisecondes
 
 }
 
@@ -56,7 +61,6 @@ void MyScene::update() {
             movie->start();
             death();
             timer->stop();
-
         }
     }
 
@@ -79,6 +83,29 @@ void MyScene::update() {
 }
 
 
+void MyScene::updateEnnemy() {
+
+    for(int i=0; i<=listeEnnemy.size()-1; i = i+2){
+        QPointF pos = listeEnnemy[i]->pos();
+        QPointF posSpaceship = mainSpaceShip->pos();
+        if(pos.rx()>posSpaceship.rx()){
+            listeEnnemy[i]->setPos(pos.rx()-1, pos.ry()+2);
+        } else{
+            listeEnnemy[i]->setPos(pos.rx()+1, pos.ry()+2);
+        }
+                if(listeEnnemy[i]->collidesWithItem(mainSpaceShip)) {
+                    timerEnnemy->stop();
+                }
+    }
+
+}
+
+
+//void MyScene::updateMissile() {
+//    QPointF pos = itemMissile->pos();
+//}
+
+
 MyScene::~MyScene() {
 
 }
@@ -86,17 +113,17 @@ MyScene::~MyScene() {
 void MyScene::keyPressEvent(QKeyEvent* event){
     if(event->key() == Qt::Key_D) { // appui sur la touche D du clavier
         QPointF pos = mainSpaceShip->pos();
-        mainSpaceShip->setPos(pos.rx()+1, pos.ry());
+        mainSpaceShip->setPos(pos.rx()+3, pos.ry());
 
         QPointF posScore = counter->pos();
-        counter->setPos(posScore.rx()+1, posScore.ry());
+        counter->setPos(posScore.rx()+3, posScore.ry());
     }
     if(event->key() == Qt::Key_Q) { // appui sur la touche G du clavier
         QPointF pos = mainSpaceShip->pos();
-        mainSpaceShip->setPos(pos.rx()-1, pos.ry());
+        mainSpaceShip->setPos(pos.rx()-3, pos.ry());
 
         QPointF posScore = counter->pos();
-        counter->setPos(posScore.rx()-1, posScore.ry());
+        counter->setPos(posScore.rx()-3, posScore.ry());
     }
 }
 
@@ -112,6 +139,13 @@ void MyScene::createEnemy() {
         listeEnnemy.append(itemEnnemy);
     }
 }
+
+//void MyScene::createMissile() {
+//    QPointF posSpaceship = mainSpaceShip->pos();
+//    Missile* itemMissile = new Missile(posSpaceship.rx(), posSpaceship.ry());
+//    this->addItem(itemMissile);
+//    listeMissile.append(itemMissile);
+//}
 
 QString MyScene::getRandomSpaceship() {
     QString spaceshipEnnemy= "";
