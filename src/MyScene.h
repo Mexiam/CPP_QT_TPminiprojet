@@ -20,8 +20,11 @@
 #include <QVector>
 #include <QString>
 #include <QMovie>
+#include <QFile>
+#include <QTextStream>
 #include "Ennemy.h"
 #include "Missile.h"
+#include "StartScreen.h"
 class MyScene : public QGraphicsScene {
     Q_OBJECT
 private:
@@ -33,22 +36,19 @@ private:
     QGraphicsTextItem *counter = new QGraphicsTextItem("Score : " + QString::number(score));
     QVector<Ennemy*> listeEnnemy;
     QMovie* movie = new QMovie("explosion.gif");
-    QWidget* deathWidjet;
-    QWidget* startWidjet;
-    QPushButton* restart = new QPushButton("Restart");
-    QPushButton* play = new QPushButton("Play Game!");
-    QPushButton* home = new QPushButton("Home");
-    QHBoxLayout* buttonLayout = new QHBoxLayout;
-    QVBoxLayout* layout = new QVBoxLayout;
-    QVBoxLayout* layoutStart = new QVBoxLayout;
     QGraphicsPixmapItem* explosion = new QGraphicsPixmapItem(QPixmap::fromImage(movie->currentImage()));
     QTimer* timer = new QTimer(this);
     QTimer* timerEnnemy = new QTimer(this);
     QTimer* timerMissile = new QTimer(this);
     QVector<Missile*> listeMissile;
+    StartScreen* starterPage = new StartScreen();
+    QWidget* deathWidget = new QWidget();
+    QString* playerName = new QString();
 
     int count = 7;
     int score = 0;
+
+    void playGame();
 
 public:
     MyScene(QObject* parent = nullptr);
@@ -60,11 +60,12 @@ public:
     QString getRandomSpaceship();
 
 public slots:
+    void startGame(QString playerName);
     void restartGame();
     void update();
     void updateEnnemy();
     void updateMissile();
-    void startGame();
+    void showHome();
 
 };
 
