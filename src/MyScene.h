@@ -21,6 +21,7 @@
 #include <QString>
 #include <QMovie>
 #include "Ennemy.h"
+#include "Missile.h"
 class MyScene : public QGraphicsScene {
     Q_OBJECT
 private:
@@ -42,6 +43,9 @@ private:
     QVBoxLayout* layoutStart = new QVBoxLayout;
     QGraphicsPixmapItem* explosion = new QGraphicsPixmapItem(QPixmap::fromImage(movie->currentImage()));
     QTimer* timer = new QTimer(this);
+    QTimer* timerEnnemy = new QTimer(this);
+    QTimer* timerMissile = new QTimer(this);
+    QVector<Missile*> listeMissile;
 
     int count = 7;
     int score = 0;
@@ -51,12 +55,15 @@ public:
     virtual ~MyScene();
     void keyPressEvent(QKeyEvent* event);
     void createEnemy();
+    void createMissile();
     void death();
     QString getRandomSpaceship();
 
 public slots:
     void restartGame();
     void update();
+    void updateEnnemy();
+    void updateMissile();
     void startGame();
 
 };
