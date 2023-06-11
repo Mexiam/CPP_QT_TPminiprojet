@@ -31,7 +31,7 @@ MyScene::MyScene(QObject* parent) : QGraphicsScene(parent) {
     // Timers connection done only once at init to prevent multiple call to update functions
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     connect(timerEnnemy, SIGNAL(timeout()), this, SLOT(updateEnnemy()));
-    connect(timerMissile, SIGNAL(timeout()), this, SLOT(updateMissile()));
+    //connect(timerMissile, SIGNAL(timeout()), this, SLOT(updateMissile()));
 }
 
 void MyScene::update() {
@@ -61,15 +61,7 @@ void MyScene::update() {
 
     QPointF itemPos = mainSpaceShip->pos();
     if(itemPos.y()<=200){
-        this->mainSpaceShip->setPos(itemPos.x(), 3900);
-        QPointF posScore = counter->pos();
-        this->counter->setPos(posScore.rx(), 3700);
-        //timer->stop();
-        qDeleteAll(listeEnnemy);
-        listeEnnemy.clear();
-        createEnemy();
-        count = count+3;
-        std::cout<<count;
+        newLevel();
     }
 
 }
@@ -231,7 +223,7 @@ void MyScene::death() {
 }
 
 void MyScene::startGame(QString name) {
-    playerName = &name;
+    *playerName = name;
     starterPage->hide();
     playGame();
 }
@@ -239,16 +231,16 @@ void MyScene::startGame(QString name) {
 void MyScene::restartGame() {
     deathWidget->hide();
     QList<QObject *> children = deathWidget->children();
-
     foreach (QObject *child, children) {
         child->deleteLater();
     }
     playGame();
 }
 
-void MyScene::playGame() {
+void MyScene::playGame(int startScore) {
+    qDebug() << startScore;
     qDebug() << *playerName;
-    score = 0;
+    score = startScore;
     this->counter->setDefaultTextColor(QColor(Qt::white));
     this->mainSpaceShip->setPos(500, 3900);
     this->counter->setPos(625, 3700);
@@ -262,12 +254,26 @@ void MyScene::playGame() {
 
 void MyScene::showHome(){
     deathWidget->hide();
-    QList<QObject *> children = deathWidget->children();
+    QList<QObject*> children = deathWidget->children();
 
     foreach (QObject *child, children) {
         child->deleteLater();
     }
+
     starterPage->show();
     QPointF pos = mainSpaceShip->pos();
     starterPage->move(pos.rx()-175, pos.ry()-400);
+}
+
+void MyScene::newLevel(){
+    timer->stop();
+    timerEnnemy->stop();
+    timerMissile->stop();
+    QPointF itemPos = mainSpaceShip->pos();
+    this->mainSpaceShip->setPos(itemPos.x(), 3900);
+    QPointF posScore = counter->pos();
+    this->counter->setPos(posScore.rx(), 3700);
+    count = count + 3;
+    qDebug() << count;
+    playGame(score);
 }

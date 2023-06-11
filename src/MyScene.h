@@ -48,7 +48,8 @@ private:
     int count = 7;
     int score = 0;
 
-    void playGame();
+    void playGame(int startScore = 0);
+    void newLevel();
 
 public:
     MyScene(QObject* parent = nullptr);
@@ -64,7 +65,7 @@ public slots:
     void restartGame();
     void update();
     void updateEnnemy();
-    void updateMissile();
+    //void updateMissile();
     void showHome();
 
 };
