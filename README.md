@@ -28,9 +28,9 @@ Au début de la partie, vous ne pourrez que vous déplacer vers la gauche (Q) ou
 La première vague d'ennemis arrive avec 15 ennemis. À chaque vague, les ennemis de la vague précédente sont détruits et des nouveaux sont créés. Chaque vague augmente le nombre n'ennemis. Un fichier qui sera créé dans le cmake-build-debug et stockeras les meilleurs scores, avec la date du jour où ce record est pris. Pour permettre la bonne lecture des fichiers image, un fichier assets.qrc est créé, ce qui permet de pouvoir mettre les images dans un fichier en dehors du cmake-build. Le son a essayé d'être rajouté, mais visiblement la WSL debian ne permet pas facilement l'utilisation de ces fichiers audio.
 	
 
-	-Note des développeurs :
+### Note des développeurs :
 
-	Après avoir bien lu ce ReadMe, vous devriez être en mesure de comprendre les principales fonctionnalités de notre jeu. Nous sommes joignables si besoin par mail pour répondre à certaines précisions. On espère que vous découvrirez et que vous apprécierez le jeu et il ne nous reste plus qu'à vous souhaiter de bonnes parties !
+Après avoir bien lu ce ReadMe, vous devriez être en mesure de comprendre les principales fonctionnalités de notre jeu. Nous sommes joignables si besoin par mail pour répondre à certaines précisions. On espère que vous découvrirez et que vous apprécierez le jeu et il ne nous reste plus qu'à vous souhaiter de bonnes parties !
 
 
 Maxime Chauveau
