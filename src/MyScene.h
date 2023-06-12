@@ -18,6 +18,8 @@
 #include <QWidget>
 #include <QLayout>
 #include <QVector>
+#include <QMediaPlayer>
+#include <QAudioOutput>
 #include <QString>
 #include <QMovie>
 #include <QFile>
@@ -34,24 +36,32 @@ private:
     QGraphicsPixmapItem* mainSpaceShip = new  QGraphicsPixmapItem(QPixmap(":/assets/img/4_Green.png"));
     QGraphicsView* view = new QGraphicsView(this);
     QGraphicsTextItem *counter = new QGraphicsTextItem("Score : " + QString::number(score));
-    QVector<Ennemy*> listeEnnemy;
+
     QMovie* movie = new QMovie("explosion.gif");
     QGraphicsPixmapItem* explosion = new QGraphicsPixmapItem(QPixmap::fromImage(movie->currentImage()));
     QTimer* timer = new QTimer(this);
     QTimer* timerEnnemy = new QTimer(this);
-    QTimer* timerMissile = new QTimer(this);
-    QVector<Missile*> listeMissile;
+
     StartScreen* starterPage = new StartScreen();
     QWidget* deathWidget = new QWidget();
     QString* playerName = new QString();
 
-    int count = 7;
+    QGraphicsPixmapItem* shield = new  QGraphicsPixmapItem(QPixmap(":/assets/img/shield.png"));
+
+    QMediaPlayer* soundBG = new QMediaPlayer();
+    QAudioOutput* soundOutput = new QAudioOutput();
+
+    QTime couldown;
+    int powerups = 0;
+
+    int count = 15;
     int score = 0;
 
     void playGame(int startScore = 0);
     void newLevel();
 
 public:
+    QVector<Ennemy*> listeEnnemy;
     MyScene(QObject* parent = nullptr);
     virtual ~MyScene();
     void keyPressEvent(QKeyEvent* event);

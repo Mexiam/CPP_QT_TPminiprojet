@@ -6,7 +6,11 @@
         <file>assets/img/6_Red.png</file>
         <file>assets/img/10_Red.png</file>
         <file>assets/img/BG.png</file>
+        <file>assets/img/missile.png</file>
+        <file>assets/img/shield.png</file>
         <file>assets/img/4_Green.png</file>
+        <file>assets/data/scores.csv</file>
+        <file>assets/music/musicBG.mp3</file>
 
     </qresource>
 </RCC>

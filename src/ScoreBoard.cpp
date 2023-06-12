@@ -5,6 +5,10 @@
 #include "ScoreBoard.h"
 
 ScoreBoard::ScoreBoard(const QString &name, QWidget *parent)  : QTableWidget(parent){
+    readCSV(name);
+}
+
+void ScoreBoard::readCSV(const QString &name) {
     QFile file(name);
     if (!file.exists()) {
         qDebug() << "Fichier CSV inexistant.";

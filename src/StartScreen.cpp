@@ -9,15 +9,16 @@ StartScreen::StartScreen() : QWidget() {
     usernameInput->setMaxLength(20);
     usernameInput->setReadOnly(false);
 
+
     layout->addWidget(title);
     layout->addWidget(usernameInput);
     layout->addWidget(title2);
     layout->addWidget(scores);
     layout->addWidget(play);
-
     layout->setAlignment(Qt::AlignCenter);
 
     play->setStyleSheet("background-color: black; color: white; font-size: 16px;");
+
 
     QFont font("Tahoma ", 12, QFont::Bold);
     title->setFont(font);

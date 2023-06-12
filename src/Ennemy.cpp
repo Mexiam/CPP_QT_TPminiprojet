@@ -6,7 +6,7 @@
 Ennemy::Ennemy(QString url, int x, int y) {
     this->setPixmap(QPixmap(url));
     this->setPos(x, y);
-    double randomSizeSpaceShip = QRandomGenerator::global()->generateDouble()*(0.60-0.40);
+    double randomSizeSpaceShip = QRandomGenerator::global()->generateDouble()*0.1+0.1;
     qreal scaleRatio = randomSizeSpaceShip;
     this->setScale(scaleRatio);
 }

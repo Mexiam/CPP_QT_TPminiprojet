@@ -9,6 +9,7 @@
 #include <QLineEdit>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QCoreApplication>
 #include <QGraphicsScene>
 #include "ScoreBoard.h"
 
@@ -16,12 +17,13 @@ class StartScreen : public QWidget {
 Q_OBJECT
 public:
     StartScreen();
+    ScoreBoard *scores = new ScoreBoard("scores.csv");
 private:
     QVBoxLayout *layout = new QVBoxLayout();
     QLabel *title = new QLabel("SPACESHIPS");
-    QLineEdit *usernameInput=  new QLineEdit("Player");
+    QLineEdit *usernameInput=  new QLineEdit();
     QLabel *title2 = new QLabel("Best players :");
-    ScoreBoard *scores = new ScoreBoard(":/assets/data/scores.csv");
+
     QPushButton* play = new QPushButton("Play Game!");
 private slots:
     void verifyUsernameForStart();

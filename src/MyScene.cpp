@@ -8,6 +8,7 @@ MyScene::MyScene(QObject* parent) : QGraphicsScene(parent) {
     this->addItem(mainSpaceShip);
     this->addItem(counter);
     this->addItem(explosion);
+    this->addItem(shield);
     qDeleteAll(listeEnnemy);
     listeEnnemy.clear();
     createEnemy();
@@ -32,6 +33,17 @@ MyScene::MyScene(QObject* parent) : QGraphicsScene(parent) {
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     connect(timerEnnemy, SIGNAL(timeout()), this, SLOT(updateEnnemy()));
     //connect(timerMissile, SIGNAL(timeout()), this, SLOT(updateMissile()));
+    shield->setPos(7000, 7000);
+
+    couldown = QTime::currentTime();
+
+
+    //SON INCOMPATIBLE AVEC LA WSL
+//    soundBG->setAudioOutput(soundOutput);
+//    soundBG->setSource(QUrl("qrc:/assets/music/musicBG.mp3"));
+//    soundOutput->setVolume(0.2);
+//    soundBG->setLoops(QMediaPlayer::Infinite);
+//    soundBG->play();
 }
 
 void MyScene::update() {
@@ -40,6 +52,7 @@ void MyScene::update() {
     QPointF posScore = counter->pos();
 
     counter->setPos(posScore.rx(), posScore.ry() - 5);
+
 
     this->score = score +7;
 
@@ -57,11 +70,24 @@ void MyScene::update() {
         }
     }
 
+    QList<QGraphicsItem*> collidingShield = shield->collidingItems();
+            foreach(QGraphicsItem* item, collidingShield){
+            Ennemy* ennemy = dynamic_cast<Ennemy*>(item);
+            if(dynamic_cast<Ennemy*>(item)) {
+                qreal scaleRatio = 0;
+                this->shield->setScale(scaleRatio);
+                ennemy->setPos(10000, 10000); // c'est moche
+            }
+        }
+
     this->view->centerOn(posSpaceship.rx()+30, posSpaceship.ry()-200);
 
     QPointF itemPos = mainSpaceShip->pos();
     if(itemPos.y()<=200){
         newLevel();
+    }
+    if(powerups>=2){
+        shield->setPos(posSpaceship.rx()-200, posSpaceship.ry()-250);
     }
 
 }
@@ -81,13 +107,20 @@ void MyScene::updateEnnemy() {
                     timerEnnemy->stop();
                 }
     }
+    for(int i=1; i<=listeEnnemy.size()-2; i = i+2){
+        QPointF pos = listeEnnemy[i]->pos();
+        int randomX = QRandomGenerator::global()->bounded(-5, 5);
+        int randomY = QRandomGenerator::global()->bounded(-5, 5);
+        listeEnnemy[i]->setPos(pos.rx() + randomX, pos.ry() + randomY);
+        if(listeEnnemy[i]->collidesWithItem(mainSpaceShip)) {
+            timerEnnemy->stop();
+        }
+    }
 
 }
 
 
-//void MyScene::updateMissile() {
-//    QPointF pos = itemMissile->pos();
-//}
+
 
 
 MyScene::~MyScene() {
@@ -97,25 +130,40 @@ MyScene::~MyScene() {
 void MyScene::keyPressEvent(QKeyEvent* event){
     if(event->key() == Qt::Key_D) { // appui sur la touche D du clavier
         QPointF pos = mainSpaceShip->pos();
-        mainSpaceShip->setPos(pos.rx()+3, pos.ry());
+        if(pos.rx()<590) {
+            mainSpaceShip->setPos(pos.rx() + 3, pos.ry());
 
-        QPointF posScore = counter->pos();
-        counter->setPos(posScore.rx()+3, posScore.ry());
+            QPointF posScore = counter->pos();
+            counter->setPos(posScore.rx() + 3, posScore.ry());
+        }
     }
-    if(event->key() == Qt::Key_Q) { // appui sur la touche G du clavier
+    if(event->key() == Qt::Key_Q) { // appui sur la touche Q du clavier
         QPointF pos = mainSpaceShip->pos();
-        mainSpaceShip->setPos(pos.rx()-3, pos.ry());
+        if(pos.rx()>200) {
+            mainSpaceShip->setPos(pos.rx() - 3, pos.ry());
 
-        QPointF posScore = counter->pos();
-        counter->setPos(posScore.rx()-3, posScore.ry());
+            QPointF posScore = counter->pos();
+            counter->setPos(posScore.rx() - 3, posScore.ry());
+        }
     }
+
+    if(event->key() == Qt::Key_S) { // appui sur la touche S du clavier
+        if(QTime::currentTime() > couldown && powerups >= 1) {
+            this->couldown = QTime::currentTime().addSecs(2);
+            QPointF pos = mainSpaceShip->pos();
+
+            Missile *newMissile = new Missile(pos.rx() + 10, pos.ry() - 30);
+            this->addItem(newMissile);
+        }
+    }
+    QGraphicsScene::keyPressEvent(event);
 }
 
 
 void MyScene::createEnemy() {
     for(int i = 0; i<=count; i++){
         int randomX = QRandomGenerator::global()->bounded(100, 600);
-        int randomY = QRandomGenerator::global()->bounded(500, 4000);
+        int randomY = QRandomGenerator::global()->bounded(500, 3500);
 
         QString spaceshipEnnemy= getRandomSpaceship();
         Ennemy* itemEnnemy = new Ennemy(spaceshipEnnemy, randomX, randomY);
@@ -124,12 +172,7 @@ void MyScene::createEnemy() {
     }
 }
 
-//void MyScene::createMissile() {
-//    QPointF posSpaceship = mainSpaceShip->pos();
-//    Missile* itemMissile = new Missile(posSpaceship.rx(), posSpaceship.ry());
-//    this->addItem(itemMissile);
-//    listeMissile.append(itemMissile);
-//}
+
 
 QString MyScene::getRandomSpaceship() {
     QString spaceshipEnnemy= "";
@@ -158,6 +201,10 @@ QString MyScene::getRandomSpaceship() {
 }
 
 void MyScene::death() {
+    powerups = 0;
+    count = 15;
+    qDeleteAll(listeEnnemy);
+    listeEnnemy.clear();
     QList<QObject *> children = deathWidget->children();
 
     foreach (QObject *child, children) {
@@ -204,7 +251,7 @@ void MyScene::death() {
     deathWidget->setLayout(layout);
     deathWidget->show();
 
-    QFile file(":/assets/data/scores.csv");
+    QFile file("scores.csv");
     if (!file.exists()) {
         qDebug() << "Fichier CSV inexistant.";
     }
@@ -225,15 +272,19 @@ void MyScene::death() {
         scoresFile << newScore.join(";") << "\n"; // Ecrit dans le fichier
         file.close();
     }
+    starterPage->scores->readCSV("scores.csv");
 }
 
 void MyScene::startGame(QString name) {
+    count = 15;
+    powerups = 0;
     *playerName = name;
     starterPage->hide();
     playGame();
 }
 
 void MyScene::restartGame() {
+    powerups = 0;
     deathWidget->hide();
     QList<QObject *> children = deathWidget->children();
     foreach (QObject *child, children) {
@@ -251,7 +302,7 @@ void MyScene::playGame(int startScore) {
     this->counter->setPos(625, 3700);
     timer->start(30);
     timerEnnemy->start(30);
-    timerMissile->start(30);
+
     qDeleteAll(listeEnnemy);
     listeEnnemy.clear();
     createEnemy();
@@ -271,14 +322,18 @@ void MyScene::showHome(){
 }
 
 void MyScene::newLevel(){
+    powerups += 1;
+    if(powerups>=2){
+        qreal scaleRatio = 1;
+        this->shield->setScale(scaleRatio);
+    }
     timer->stop();
     timerEnnemy->stop();
-    timerMissile->stop();
     QPointF itemPos = mainSpaceShip->pos();
     this->mainSpaceShip->setPos(itemPos.x(), 3900);
     QPointF posScore = counter->pos();
     this->counter->setPos(posScore.rx(), 3700);
-    count = count + 3;
+    count = count + 10;
     qDebug() << count;
     playGame(score);
 }

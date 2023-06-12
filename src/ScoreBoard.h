@@ -15,6 +15,7 @@ class ScoreBoard : public QTableWidget {
 Q_OBJECT
 public:
     ScoreBoard(const QString &name, QWidget *parent = nullptr);
+    void readCSV(const QString &name);
 };
 
 

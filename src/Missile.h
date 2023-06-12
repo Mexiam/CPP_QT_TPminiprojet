@@ -8,19 +8,30 @@
 #include <QApplication>
 #include <QGraphicsView>
 #include <QScrollBar>
+#include <QGraphicsPixmapItem>
+#include "MyScene.h"
 #include <QGraphicsView>
 #include <QVBoxLayout>
 #include <QWidget>
 #include <iostream>
 #include <QString>
+#include <QTimer>
 #include <QGraphicsPathItem>
+#include <QTransform>
+#include <QDate>
 #include <QRandomGenerator>
+#include "Ennemy.h"
 
-class Missile {
+class Missile : public QObject , public QGraphicsPixmapItem{
+    Q_OBJECT
 private:
-    QGraphicsPixmapItem* item;
+    QTimer* timerMissile = new QTimer();
+
 public:
     Missile(int x, int y);
+
+public slots:
+    void updateMissile();
 
 };
 
